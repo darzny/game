@@ -5,7 +5,6 @@ import {
 	Run,
 	Sit,
 	Roll,
-	Dive,
 	Hit,
 	states,
 	PLAYER_STATE,
@@ -17,30 +16,30 @@ import { Collision } from "./collision.js";
 export default class Player {
 	constructor(game) {
 		this.game = game;
-		this.spriteWidth = 100;
-		this.spriteHeight = 91.3;
+		this.spriteWidth = 320.5;
+		this.spriteHeight = 271;
 
-		const sizeModifier = 1;
+		const sizeModifier = 0.5;
 
-		this.width = this.spriteWidth / sizeModifier;
-		this.height = this.spriteHeight / sizeModifier;
+		this.width = this.spriteWidth * sizeModifier;
+		this.height = this.spriteHeight * sizeModifier;
 
 		this.x = 20;
 		this.y = this.game.height - this.height - this.game.groundMargin;
 
 		this.frameX = 0;
-		this.frameY = 0;
+		this.frameYCoordinate = 0;
 		this.maxFrame = 5;
 
 		this.speed = 0;
-		this.maxSpeed = 0.2;
+		this.maxSpeed = 0.1;
 
 		this.fps = 20;
 		this.frameInterval = 1000 / this.fps;
 		this.frameTimer = 0;
 
 		this.vy = 0;
-		this.maxVy = 25;
+		this.maxVy = 26;
 		this.weight = 1;
 
 		this.image = document.getElementById("playerImage");
@@ -52,7 +51,6 @@ export default class Player {
 			new Run(this.game),
 			new Sit(this.game),
 			new Roll(this.game),
-			new Dive(this.game),
 			new Hit(this.game),
 		];
 	}
@@ -60,8 +58,6 @@ export default class Player {
 	update(input, deltaTime) {
 		this.checkColission();
 		this.currentState.handleInput(input);
-
-		this.x += this.speed;
 
 		if (
 			input.includes(GAME_KEY.RIGHT) &&
@@ -107,12 +103,14 @@ export default class Player {
 
 	draw(context) {
 		if (this.game.debug) {
-			context.strokeRect(this.x, this.y, this.width, this.height);
+			const { x, y, width, height } = this.getCollisionBox();
+			context.strokeRect(x, y, width, height);
 		}
+
 		context.drawImage(
 			this.image,
 			this.frameX * this.spriteWidth,
-			this.frameY * this.spriteHeight,
+			this.frameYCoordinate,
 			this.spriteWidth,
 			this.spriteHeight,
 			this.x,
@@ -128,19 +126,32 @@ export default class Player {
 		);
 	}
 
+	isSitting() {
+		return this.currentState === this.states[4];
+	}
+
 	setState(state, speed) {
 		this.currentState = this.states[state];
 		this.game.speed = this.game.maxSpeed * speed;
-		this.currentState.enter(state);
+		this.currentState.enter();
 	}
 
 	checkColission() {
+		const playerBox = this.getCollisionBox();
+
 		this.game.enemies.forEach((enemy) => {
+			const enemyBox = {
+				x: enemy.x,
+				y: enemy.y,
+				width: enemy.width,
+				height: enemy.height,
+			};
+
 			if (
-				enemy.x < this.x + this.width &&
-				enemy.x + enemy.width > this.x &&
-				enemy.y < this.y + this.height &&
-				enemy.y + enemy.height > this.y
+				playerBox.x < enemyBox.x + enemyBox.width &&
+				playerBox.x + playerBox.width > enemyBox.x &&
+				playerBox.y < enemyBox.y + enemyBox.height &&
+				playerBox.y + playerBox.height > enemyBox.y
 			) {
 				enemy.markedForDeletion = true;
 				this.game.collisions.push(
@@ -151,16 +162,14 @@ export default class Player {
 					)
 				);
 
-				if (
-					this.currentState === this.states[5] ||
-					this.currentState === this.states[6]
-				) {
+				if (this.currentState === this.states[5]) {
 					this.game.score++;
 					return;
 				}
 
-				this.setState(states[PLAYER_STATE.HIT], 0);
 				this.game.lives--;
+
+				this.setState(states[PLAYER_STATE.HIT], 0);
 
 				if (this.game.lives <= 0) {
 					this.game.gameOver = true;
@@ -169,10 +178,23 @@ export default class Player {
 		});
 	}
 
+	getCollisionBox() {
+		return {
+			x: this.x + this.width * 0.1,
+			y: this.y + (this.isSitting() ? this.height / 2 : 0),
+			width: this.width * 0.6,
+			height: this.height * (this.isSitting() ? 0.5 : 1),
+		};
+	}
+
 	reset() {
 		this.x = 20;
 		this.y = this.game.height - this.height - this.game.groundMargin;
 		this.frameTimer = 0;
 		this.vy = 0;
+		this.speed = 0;
+
+		this.currentState = this.states[0];
+		this.currentState.enter();
 	}
 }

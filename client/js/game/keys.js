@@ -9,7 +9,9 @@ export const GAME_KEY = {
 
 export const AVAILABLE_KEYS = Object.values(GAME_KEY);
 
-export const KEY_ACTION = {
-	PRESS: "PRESS",
-	RELEASE: "RELEASE",
-};
+export const GAME_KEYS = [
+	GAME_KEY.UP,
+	GAME_KEY.RIGHT,
+	GAME_KEY.DOWN,
+	GAME_KEY.SPACE,
+];

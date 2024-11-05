@@ -2,56 +2,64 @@ import Game from "./game.js";
 
 import { startGameSession, endGameSession } from "./../api/session.js";
 
-const startGame = () => {
-	const canvas = document.getElementById("canvas1");
-	const ctx = canvas.getContext("2d");
+(function () {
+	"use strict";
 
-	canvas.width = 900;
-	canvas.height = 500;
+	const startGame = () => {
+		const canvas = document.getElementById("canvas1");
+		const ctx = canvas.getContext("2d");
 
-	const game = new Game(canvas.width, canvas.height);
-	let lastTime = 0;
+		canvas.width = 900;
+		canvas.height = 500;
 
-	let isStarted = false;
+		const game = new Game(canvas.width, canvas.height);
+		let lastTime = 0;
 
-	const animate = (timestamp) => {
-		if (game.gameOver) {
-			isStarted = false;
-		}
+		const animate = (timestamp) => {
+			const deltatime = timestamp - lastTime;
+			lastTime = timestamp;
 
-		const deltatime = timestamp - lastTime;
-		lastTime = timestamp;
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+			if (game.isStarted) {
+				game.update(deltatime);
+			}
 
-		if (isStarted) {
-			game.update(deltatime);
-		}
+			game.draw(ctx);
 
-		game.draw(ctx);
+			if (!game.gameOver) {
+				requestAnimationFrame(animate);
+			} else {
+				endGameSession(game.score, game.duration);
+			}
+		};
 
-		if (!game.gameOver) {
-			requestAnimationFrame(animate);
-		} else {
-			endGameSession(game.score, game.duration);
-		}
+		window.addEventListener("keydown", (e) => {
+			e.preventDefault();
+
+			if (e.code === "Enter" && (game.gameOver || !game.isStarted)) {
+				if (!game.isStarted) {
+					game.isStarted = true;
+
+					game.restartGame();
+
+					startGameSession();
+
+					return;
+				}
+
+				game.restartGame();
+
+				startGameSession();
+
+				animate(0);
+			}
+		});
+
+		animate(0);
 	};
 
-	window.addEventListener("keydown", (e) => {
-		e.preventDefault();
-
-		if (e.code === "Enter" && (game.gameOver || !isStarted)) {
-			isStarted = true;
-
-			game.restartGame();
-			startGameSession();
-			requestAnimationFrame(animate);
-		}
+	window.addEventListener("load", () => {
+		startGame();
 	});
-
-	requestAnimationFrame(animate);
-};
-
-window.addEventListener("load", () => {
-	startGame();
-});
+})();

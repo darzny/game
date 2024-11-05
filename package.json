@@ -1,8 +1,10 @@
 {
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
-    "dev": "parcel client/pages/*.html",
+    "dev": "parcel client/pages/*.html --dist-dir public",
     "build": "parcel build client/pages/*.html --dist-dir public",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev:server": "nodemon server.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -10,6 +12,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-session": "^1.18.1",
+    "helmet": "^8.0.0",
     "pg": "^8.13.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.4"

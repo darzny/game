@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Game - Main</title>
 		<link rel="stylesheet" href="../css/style.css" />
+		<link rel="icon" href="./../assets/favicon.png" />
 	</head>
 	<body>
 		<header class="header">
@@ -14,35 +15,35 @@
 		</header>
 		<main>
 			<form class="loginForm" id="loginForm">
-				<h2 class="loginTitle">Login</h2>
+				<h2 class="loginTitle">Вход</h2>
 				<input
 					type="text"
 					id="username"
 					name="username"
-					placeholder="Username"
+					placeholder="Имя"
 					required
 				/>
 				<input
 					type="password"
 					id="password"
 					name="password"
-					placeholder="Password"
+					placeholder="Пароль"
 					required
 				/>
-				<button class="loginButton" type="submit">Login</button>
+				<button class="loginButton" type="submit">Войти</button>
 				<p class="loginText">
-					New user?
-					<span class="loginLink" id="showRegisterForm">Register here</span>
+					Новый пользователь?
+					<span class="loginLink" id="showRegisterForm">Регистрация</span>
 				</p>
 			</form>
 
 			<form class="loginForm" id="registerForm" style="display: none">
-				<h2 class="loginTitle">Register</h2>
+				<h2 class="loginTitle">Регистрация</h2>
 				<input
 					type="text"
 					id="regUsername"
 					name="username"
-					placeholder="Username"
+					placeholder="Имя"
 					required
 				/>
 				<input
@@ -56,13 +57,13 @@
 					type="password"
 					id="regPassword"
 					name="password"
-					placeholder="Password"
+					placeholder="Пароль"
 					required
 				/>
-				<button class="loginButton" type="submit">Register</button>
+				<button class="loginButton" type="submit">Зарегистрироваться</button>
 				<p class="loginText">
-					Already have an account?
-					<span class="loginLink" id="showLoginForm">Login here</span>
+					Уже есть аккаунт?
+					<span class="loginLink" id="showLoginForm">Вход тут</span>
 				</p>
 			</form>
 			<script type="module" src="./../js/Login.js"></script>

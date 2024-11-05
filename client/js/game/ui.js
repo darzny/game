@@ -20,10 +20,10 @@ export class UI {
 		context.textAlign = "left";
 		context.fillStyle = this.game.fontColor;
 
-		context.fillText(`Score: ${this.game.score}`, 20, 50);
+		context.fillText(`Очки: ${this.game.score}`, 20, 50);
 
 		context.font = `${this.fontSize * 0.8}px ${this.fontFamily}`;
-		context.fillText(`Time: ${(this.game.time / 1000).toFixed(1)}`, 20, 80);
+		context.fillText(`Время: ${(this.game.time / 1000).toFixed(1)}`, 20, 80);
 
 		for (let i = 0; i < this.game.lives; i++) {
 			context.drawImage(
@@ -35,6 +35,23 @@ export class UI {
 			);
 		}
 
+		if (!this.game.isStarted && this.game.gameOver === null) {
+			context.textAlign = "center";
+			context.fillText(
+				"Нажмите Enter чтобы начать игру",
+				this.game.width * 0.5,
+				80
+			);
+
+			context.font = `${this.fontSize * 0.6}px ${this.fontFamily}`;
+
+			context.fillText("Управление:", this.game.width * 0.5, 130);
+			context.fillText("Вперед: →", this.game.width * 0.5, 160);
+			context.fillText("Скользить: ↓", this.game.width * 0.5, 190);
+			context.fillText("Прыжок: ↑", this.game.width * 0.5, 220);
+			context.fillText("Атака: пробел", this.game.width * 0.5, 250);
+		}
+
 		if (this.game.gameOver) {
 			context.textAlign = "center";
 			context.font = `${this.fontSize * 2}px ${this.fontFamily}`;
@@ -44,22 +61,22 @@ export class UI {
 				this.game.time >= this.game.maxTime
 			) {
 				context.fillText(
-					"You win!",
+					"Вы выиграли!",
 					this.game.width * 0.5,
 					this.game.height * 0.5
 				);
 			} else {
 				context.fillText(
-					"Game Over",
+					"Вы проиграли",
 					this.game.width * 0.5,
-					this.game.height * 0.5
+					this.game.height * 0.5 - 60
 				);
 
 				context.font = `${this.fontSize * 0.8}px ${this.fontFamily}`;
 				context.fillText(
-					"Press Enter to restart",
+					"Нажмите Enter чтобы начать заново",
 					this.game.width * 0.5,
-					this.game.height * 0.5 + 60
+					this.game.height * 0.5
 				);
 			}
 		}

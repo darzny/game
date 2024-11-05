@@ -3,8 +3,9 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Game - My Results</title>
+		<title>Game - Мои результаты</title>
 		<link rel="stylesheet" href="./../css/style.css" />
+		<link rel="icon" href="./../assets/favicon.png" />
 	</head>
 	<body>
 		<header class="header">
@@ -13,19 +14,21 @@
 					<a class="logoLink" href="/game">Game</a>
 				</div>
 				<nav>
-					<a href="/leaderboard" class="active">Leaderboard</a>
-					<span class="active">My Results</span>
+					<a href="/leaderboard" class="active">Топ 10</a>
+					<span class="active">Мои результаты</span>
 				</nav>
+				<div class="logout" id="logout">Выход</div>
 			</div>
 		</header>
 
 		<main>
-			<h1 class="title">My results</h1>
+			<h1 class="title">Мои результаты</h1>
 
 			<section class="result-table" id="my-results">
 				<p>Loading results...</p>
 			</section>
 		</main>
 		<script type="module" src="./../js/results.js"></script>
+		<script type="module" src="./../js/logout.js"></script>
 	</body>
 </html>

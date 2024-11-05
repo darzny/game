@@ -1,4 +1,3 @@
--- 1. Таблица пользователей (users)
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -7,7 +6,6 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 2. Таблица игровых сессий (sessions)
 CREATE TABLE IF NOT EXISTS sessions (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -17,7 +15,6 @@ CREATE TABLE IF NOT EXISTS sessions (
     is_win BOOLEAN
 );
 
--- 3. Таблица типов достижений (achievement_types)
 CREATE TABLE IF NOT EXISTS achievement_types (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -25,7 +22,6 @@ CREATE TABLE IF NOT EXISTS achievement_types (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 4. Таблица достижений пользователя (achievements)
 CREATE TABLE IF NOT EXISTS achievements (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -33,7 +29,6 @@ CREATE TABLE IF NOT EXISTS achievements (
     achieved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 5. Таблица настроек пользователя (user_settings)
 CREATE TABLE IF NOT EXISTS user_settings (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -44,7 +39,6 @@ CREATE TABLE IF NOT EXISTS user_settings (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 6. Таблица друзей пользователя (user_friends)
 CREATE TABLE IF NOT EXISTS user_friends (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -52,7 +46,6 @@ CREATE TABLE IF NOT EXISTS user_friends (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 7. Таблица тем оформления (themes)
 CREATE TABLE IF NOT EXISTS themes (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) UNIQUE NOT NULL,
@@ -60,13 +53,11 @@ CREATE TABLE IF NOT EXISTS themes (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Добавление стандартных тем в таблицу themes
 INSERT INTO themes (name, description) VALUES
 ('default', 'Стандартная тема игры'),
 ('dark', 'Тёмная тема с контрастными элементами'),
 ('light', 'Светлая тема с мягкими цветами');
 
--- 8. Таблица уровней сложности (difficulty_levels)
 CREATE TABLE IF NOT EXISTS difficulty_levels (
     id SERIAL PRIMARY KEY,
     name VARCHAR(20) UNIQUE NOT NULL,
@@ -77,7 +68,6 @@ CREATE TABLE IF NOT EXISTS difficulty_levels (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Добавление стандартных уровней сложности в таблицу difficulty_levels
 INSERT INTO difficulty_levels (name, description, enemy_count, enemy_speed, bonus_frequency) VALUES
 ('easy', 'Лёгкий уровень с меньшим количеством врагов и низкой скоростью.', 5, 0.5, 1.5),
 ('normal', 'Средний уровень сложности с оптимальным количеством врагов.', 10, 1.0, 1.0),

@@ -34,10 +34,8 @@ export default class Background {
 
 		const layerImages = [
 			{ id: "layer1", speedModifier: 0 },
-			{ id: "layer2", speedModifier: 0.2 },
-			{ id: "layer3", speedModifier: 0.4 },
-			{ id: "layer4", speedModifier: 0.8 },
-			{ id: "layer5", speedModifier: 1 },
+			{ id: "layer2", speedModifier: 0.5 },
+			{ id: "layer3", speedModifier: 1 },
 		];
 
 		this.bgLayers = layerImages.map(({ id, speedModifier }) => {

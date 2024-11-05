@@ -10,10 +10,10 @@ export default class Game {
 		this.width = width;
 		this.height = height;
 
-		this.groundMargin = 30;
+		this.groundMargin = 60;
 
 		this.speed = 0;
-		this.maxSpeed = 12;
+		this.maxSpeed = 6;
 
 		this.fontColor = "black";
 
@@ -40,7 +40,8 @@ export default class Game {
 		this.maxTime = 100000;
 		this.lives = 3;
 
-		this.gameOver = false;
+		this.gameOver = null;
+		this.isStarted = false;
 
 		this.player.currentState = this.player.states[0];
 		this.player.currentState.enter();
@@ -130,9 +131,6 @@ export default class Game {
 
 		this.gameOver = false;
 		this.lives = 3;
-
-		this.player.currentState = this.player.states[0];
-		this.player.currentState.enter();
 
 		this.player.reset();
 

@@ -8,7 +8,6 @@ export const PLAYER_STATE = {
 	RUN: "RUN",
 	SIT: "SIT",
 	ROLL: "ROLL",
-	DIVE: "DIVE",
 	HIT: "HIT",
 };
 
@@ -19,8 +18,7 @@ export const states = {
 	[PLAYER_STATE.RUN]: 3,
 	[PLAYER_STATE.SIT]: 4,
 	[PLAYER_STATE.ROLL]: 5,
-	[PLAYER_STATE.DIVE]: 6,
-	[PLAYER_STATE.HIT]: 7,
+	[PLAYER_STATE.HIT]: 6,
 };
 
 class State {
@@ -37,8 +35,10 @@ export class Stay extends State {
 
 	enter() {
 		this.game.player.frameX = 0;
-		this.game.player.frameY = 0;
-		this.game.player.maxFrame = 6;
+		this.game.player.frameYCoordinate = 302;
+		this.game.player.maxFrame = 9;
+		this.game.player.spriteWidth = 320.5;
+		this.game.player.spriteHeight = 271;
 	}
 
 	handleInput(input) {
@@ -47,7 +47,7 @@ export class Stay extends State {
 		} else if (input.includes(GAME_KEY.RIGHT)) {
 			this.game.player.setState(states[PLAYER_STATE.RUN], 1);
 		} else if (input.includes(GAME_KEY.DOWN)) {
-			this.game.player.setState(states[PLAYER_STATE.SIT], 0);
+			this.game.player.setState(states[PLAYER_STATE.SIT], 1);
 		} else if (input.includes(GAME_KEY.SPACE)) {
 			this.game.player.setState(states[PLAYER_STATE.ROLL], 1);
 		}
@@ -65,8 +65,11 @@ export class Jump extends State {
 		}
 
 		this.game.player.frameX = 0;
-		this.game.player.frameY = 1;
-		this.game.player.maxFrame = 6;
+		this.game.player.frameYCoordinate = 573;
+		this.game.player.maxFrame = 4;
+
+		this.game.player.spriteWidth = 320.5;
+		this.game.player.spriteHeight = 271;
 	}
 
 	handleInput(input) {
@@ -74,8 +77,6 @@ export class Jump extends State {
 			this.game.player.setState(states[PLAYER_STATE.FALL], 1);
 		} else if (input.includes(GAME_KEY.SPACE)) {
 			this.game.player.setState(states[PLAYER_STATE.ROLL], 1);
-		} else if (input.includes(GAME_KEY.DOWN)) {
-			this.game.player.setState(states[PLAYER_STATE.DIVE], 0);
 		}
 	}
 }
@@ -86,16 +87,17 @@ export class Fall extends State {
 	}
 
 	enter() {
-		this.game.player.frameX = 0;
-		this.game.player.frameY = 2;
-		this.game.player.maxFrame = 6;
+		this.game.player.frameX = 5;
+		this.game.player.frameYCoordinate = 573;
+		this.game.player.maxFrame = 9;
+
+		this.game.player.spriteWidth = 320.5;
+		this.game.player.spriteHeight = 271;
 	}
 
 	handleInput(input) {
 		if (this.game.player.isOnTheGround()) {
 			this.game.player.setState(states[PLAYER_STATE.RUN], 1);
-		} else if (input.includes(GAME_KEY.DOWN)) {
-			this.game.player.setState(states[PLAYER_STATE.DIVE], 0);
 		}
 	}
 }
@@ -107,8 +109,11 @@ export class Run extends State {
 
 	enter() {
 		this.game.player.frameX = 0;
-		this.game.player.frameY = 3;
-		this.game.player.maxFrame = 8;
+		this.game.player.frameYCoordinate = 1115;
+		this.game.player.maxFrame = 7;
+
+		this.game.player.spriteWidth = 320.5;
+		this.game.player.spriteHeight = 271;
 	}
 
 	handleInput(input) {
@@ -123,7 +128,7 @@ export class Run extends State {
 		if (!input.includes(GAME_KEY.RIGHT)) {
 			this.game.player.setState(states[PLAYER_STATE.STAY], 0);
 		} else if (input.includes(GAME_KEY.DOWN)) {
-			this.game.player.setState(states[PLAYER_STATE.SIT], 0);
+			this.game.player.setState(states[PLAYER_STATE.SIT], 1);
 		} else if (input.includes(GAME_KEY.UP)) {
 			this.game.player.setState(states[PLAYER_STATE.JUMP], 1);
 		} else if (input.includes(GAME_KEY.SPACE)) {
@@ -138,9 +143,12 @@ export class Sit extends State {
 	}
 
 	enter() {
-		this.game.player.frameY = 5;
+		this.game.player.frameYCoordinate = 1386;
 		this.game.player.maxFrame = 4;
 		this.game.player.frameX = 0;
+
+		this.game.player.spriteWidth = 320.5;
+		this.game.player.spriteHeight = 271;
 	}
 
 	handleInput(input) {
@@ -159,8 +167,11 @@ export class Roll extends State {
 
 	enter() {
 		this.game.player.frameX = 0;
-		this.game.player.frameY = 6;
+		this.game.player.frameYCoordinate = 1115;
 		this.game.player.maxFrame = 6;
+
+		this.game.player.spriteWidth = 320.5;
+		this.game.player.spriteHeight = 271;
 	}
 
 	handleInput(input) {
@@ -194,48 +205,6 @@ export class Roll extends State {
 	}
 }
 
-export class Dive extends State {
-	constructor(game) {
-		super(PLAYER_STATE.ROLL, game);
-	}
-
-	enter() {
-		this.game.player.frameX = 0;
-		this.game.player.frameY = 6;
-		this.game.player.maxFrame = 6;
-		this.game.player.vy = 15;
-	}
-
-	handleInput(input) {
-		this.game.particles.unshift(
-			new Fire(
-				this.game,
-				this.game.player.x + this.game.player.width * 0.5,
-				this.game.player.y + this.game.player.height * 0.5
-			)
-		);
-
-		if (this.game.player.isOnTheGround()) {
-			this.game.player.setState(states[PLAYER_STATE.RUN], 1);
-
-			for (let i = 0; i < 30; i++) {
-				this.game.particles.unshift(
-					new Splash(
-						this.game,
-						this.game.player.x + this.game.player.width * 0.5,
-						this.game.player.y + this.game.player.height
-					)
-				);
-			}
-		} else if (
-			input.includes(GAME_KEY.SPACE) &&
-			this.game.player.isOnTheGround()
-		) {
-			this.game.player.setState(states[PLAYER_STATE.ROLL], 2);
-		}
-	}
-}
-
 export class Hit extends State {
 	constructor(game) {
 		super(PLAYER_STATE.HIT, game);
@@ -243,15 +212,21 @@ export class Hit extends State {
 
 	enter() {
 		this.game.player.frameX = 0;
-		this.game.player.frameY = 4;
-		this.game.player.maxFrame = 10;
+		this.game.player.frameYCoordinate = 0;
+		this.game.player.maxFrame = 9;
+
+		this.game.player.spriteWidth = 302.5;
+		this.game.player.spriteHeight = 302;
 	}
 
 	handleInput(input) {
-		if (this.game.player.frameX >= 10 && this.game.player.isOnTheGround()) {
+		if (
+			this.game.player.frameX >= this.game.player.maxFrame &&
+			this.game.player.isOnTheGround()
+		) {
 			this.game.player.setState(states[PLAYER_STATE.RUN], 1);
 		} else if (
-			this.game.player.frameX >= 10 &&
+			this.game.player.frameX >= this.game.player.maxFrame &&
 			!this.game.player.isOnTheGround()
 		) {
 			this.game.player.setState(states[PLAYER_STATE.FALL], 1);

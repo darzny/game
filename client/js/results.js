@@ -1,57 +1,59 @@
 import { getUserResults } from "./api/results.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
-	const resultsContainer = document.getElementById("my-results");
+(function () {
+	"use strict";
 
-	try {
-		const data = await getUserResults();
+	document.addEventListener("DOMContentLoaded", async () => {
+		const resultsContainer = document.getElementById("my-results");
 
-		resultsContainer.innerHTML = "";
+		try {
+			const data = await getUserResults();
 
-		if (data.length > 0) {
-			const table = document.createElement("table");
-			table.innerHTML = `
-                    <thead>
-                        <tr>
-                            <th>Score</th>
-                            <th>Date</th>
-                            <th>Duration</th>
-                            <th>Result</th>
-                        </tr>
-                    </thead>
-                `;
-			const tbody = document.createElement("tbody");
+			resultsContainer.innerHTML = "";
 
-			data.forEach((entry) => {
-				const row = document.createElement("tr");
+			if (data.length > 0) {
+				const table = document.createElement("table");
+				table.innerHTML = `
+						<thead>
+							<tr>
+								<th>Результат</th>
+								<th>Дата</th>
+								<th>Время</th>
+								<th>Итог</th>
+							</tr>
+						</thead>
+					`;
+				const tbody = document.createElement("tbody");
 
-				const duration = entry.endTime
-					? `${Math.round(
-							(new Date(entry.endTime) - new Date(entry.createdAt)) / 1000
-					  )}s`
-					: "-";
+				data.forEach((entry) => {
+					const row = document.createElement("tr");
 
-				const result = entry.isWin ? "Win" : "Loss";
+					const duration = entry.endTime
+						? `${Math.round(
+								(new Date(entry.endTime) - new Date(entry.createdAt)) / 1000
+						  )}s`
+						: "-";
 
-				row.innerHTML = `
-                        <td>${entry.score || 0}</td>
-                        <td>${new Date(
-													entry.createdAt
-												).toLocaleDateString()}</td>
-                        <td>${duration}</td>
-                        <td>${result}</td>
-                    `;
-				tbody.appendChild(row);
-			});
+					const result = entry.isWin ? "Победа" : "Поражение";
 
-			table.appendChild(tbody);
-			resultsContainer.appendChild(table);
-		} else {
-			resultsContainer.innerHTML = "<p>No results available</p>";
+					row.innerHTML = `
+							<td>${entry.score || 0}</td>
+							<td>${new Date(entry.createdAt).toLocaleDateString()}</td>
+							<td>${duration}</td>
+							<td>${result}</td>
+						`;
+					tbody.appendChild(row);
+				});
+
+				table.appendChild(tbody);
+				resultsContainer.appendChild(table);
+			} else {
+				resultsContainer.innerHTML = "<p>Результаты недоступны</p>";
+			}
+		} catch (error) {
+			console.error("Error fetching user results:", error);
+			resultsContainer.innerHTML =
+				"<p>Произошла ошибка. Попробуйте перезагрузить страницу</p>";
 		}
-	} catch (error) {
-		console.error("Error fetching user results:", error);
-		resultsContainer.innerHTML =
-			"<p>An error occurred while fetching data.</p>";
-	}
-});
+	});
+})();

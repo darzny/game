@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const path = require("path");
+const helmet = require("helmet");
 
 const gameRoutes = require("./routes/gameRoutes");
 const pageRoutes = require("./routes/pageRoutes");
@@ -14,6 +15,25 @@ require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(
+	helmet.contentSecurityPolicy({
+		directives: {
+			defaultSrc: ["'self'"],
+			scriptSrc: ["'self'"],
+		},
+	})
+);
+app.use(helmet.hidePoweredBy());
+app.use(
+	helmet.hsts({
+		maxAge: 31536000,
+		includeSubDomains: true,
+		preload: true,
+	})
+);
+app.use(helmet.xssFilter());
+app.use(helmet.frameguard({ action: "sameorigin" }));
 
 app.use(bodyParser.json());
 

@@ -34,10 +34,10 @@ class Enemy {
 		}
 		context.drawImage(
 			this.image,
-			this.frameX * this.width,
+			this.frameX * this.spriteWidth,
 			0,
-			this.width,
-			this.height,
+			this.spriteWidth,
+			this.spriteHeight,
 			this.x,
 			this.y,
 			this.width,
@@ -51,8 +51,13 @@ export class FlyingEnemy extends Enemy {
 		super();
 
 		this.game = game;
-		this.width = 60;
-		this.height = 44;
+		this.spriteWidth = 85;
+		this.spriteHeight = 88;
+
+		this.sizeModifier = 0.7;
+
+		this.width = this.spriteWidth * this.sizeModifier;
+		this.height = this.spriteHeight * this.sizeModifier;
 
 		this.x = this.game.width;
 		this.y = Math.random() * this.game.height * 0.5;
@@ -64,7 +69,7 @@ export class FlyingEnemy extends Enemy {
 		this.image = document.getElementById("enemyFly");
 
 		this.angle = 0;
-		this.va = Math.random() * 0.1 + 0.1;
+		this.va = Math.random() * 0.5 + 0.1;
 	}
 
 	update(deltatime) {
@@ -79,13 +84,20 @@ export class GroundEnemy extends Enemy {
 		super();
 
 		this.game = game;
-		this.width = 60;
-		this.height = 87;
+		this.spriteWidth = 291;
+		this.spriteHeight = 297;
+
+		this.sizeModifier = 0.4;
+
+		this.width = this.spriteWidth * this.sizeModifier;
+		this.height = this.spriteHeight * this.sizeModifier;
+
+		this.fps = 15;
 
 		this.x = this.game.width;
 		this.y = this.game.height - this.height - this.game.groundMargin;
 
-		this.image = document.getElementById("enemyPlant");
+		this.image = document.getElementById("enemyMonster");
 		this.speedX = 0;
 		this.speedY = 0;
 
@@ -98,8 +110,13 @@ export class ClimbingEnemy extends Enemy {
 		super();
 
 		this.game = game;
-		this.width = 120;
-		this.height = 144;
+		this.spriteWidth = 120;
+		this.spriteHeight = 110;
+
+		this.sizeModifier = 0.7;
+
+		this.width = this.spriteWidth * this.sizeModifier;
+		this.height = this.spriteHeight * this.sizeModifier;
 
 		this.x = this.game.width;
 		this.y = Math.random() * this.game.height * 0.5;
@@ -108,7 +125,7 @@ export class ClimbingEnemy extends Enemy {
 
 		this.speedX = 0;
 		this.speedY = Math.random() > 0.5 ? 1 : -1;
-		this.maxFrame = 5;
+		this.maxFrame = 0;
 	}
 
 	update(deltatime) {

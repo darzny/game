@@ -43,8 +43,8 @@ export class Splash extends Particle {
 		super(game);
 		this.size = Math.round() * 100 + 100;
 
-		this.x = x - this.size * 0.4;
-		this.y = y - this.size * 0.5;
+		this.x = x - this.size;
+		this.y = y - this.size * 0.1;
 
 		this.speedX = Math.random() * 6 - 3;
 		this.speedY = Math.random() * 2 + 2;

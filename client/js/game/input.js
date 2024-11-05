@@ -1,4 +1,4 @@
-import { AVAILABLE_KEYS, GAME_KEY } from "./keys.js";
+import { AVAILABLE_KEYS, GAME_KEYS, GAME_KEY } from "./keys.js";
 
 export default class InputHandler {
 	constructor(game) {
@@ -6,8 +6,10 @@ export default class InputHandler {
 		this.game = game;
 
 		window.addEventListener("keydown", (event) => {
+			const keysToCheck = this.game.gameOver ? AVAILABLE_KEYS : GAME_KEYS;
+
 			if (
-				!AVAILABLE_KEYS.includes(event.key) ||
+				!keysToCheck.includes(event.key) ||
 				this.keys.indexOf(event.key) !== -1
 			) {
 				return;
